@@ -13,6 +13,7 @@ Description=Consul snapshot agent
 Requires=network-online.target
 Requisite=consul.service
 After=network-online.target
+After=consul.service
 
 [Service]
 User={{ consul_user }}
@@ -20,7 +21,8 @@ Group={{ consul_group }}
 PIDFile={{ consul_run_path }}/consul_snapshot.pid
 PermissionsStartOnly=true
 ExecStart={{ consul_bin_path }}/consul snapshot agent \
--config-file={{ consul_config_path }}/consul_snapshot.json
+-config-file={{ consul_config_path }}/consul_snapshot.json \
+-http-addr=http://127.0.0.1:8500
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGTERM
 Restart=on-failure
